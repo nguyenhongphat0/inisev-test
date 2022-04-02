@@ -16,14 +16,43 @@
     <div class="content">
       <h1 class="title">Users</h1>
       <div class="grid">
-        <div class="user" v-for="user in users">
-          <div class="user__avatar" :style="{ 'background-image': `url(${user.image})` }"></div>
-          <div class="user__info">
-            <div class="user__info--email">✉️</div>
-            <h3 class="user__info--name">{{ user.name }}</h3>
-            <h4 class="user__info--address">{{ user.address.city }}</h4>
+        <Modal v-for="user in users" class="user">
+          <template #trigger>
+            <div class="user__avatar" :style="{ 'background-image': `url(${user.image})` }"></div>
+            <div class="user__info">
+              <div class="user__info--email">✉️</div>
+              <h3 class="user__info--name">{{ user.name }}</h3>
+              <h4 class="user__info--address">{{ user.address.city }}</h4>
+            </div>
+          </template>
+          <div class="user__detail">
+            <img class="user__detail--avatar" :src="user.image" :alt="user.name" />
+            <div class="user__detail--info">
+              <div class="user__detail--info--block">
+                <div class="user__detail--info--icon">👤</div>
+                <div class="user__detail--info--content">{{ user.name }}</div>
+              </div>
+              <div class="user__detail--info--block">
+                <div class="user__detail--info--icon">✉️</div>
+                <div class="user__detail--info--content">{{ user.email }}</div>
+              </div>
+              <div class="user__detail--info--block">
+                <div class="user__detail--info--icon">📞</div>
+                <div class="user__detail--info--content">{{ user.phone }}</div>
+              </div>
+              <div class="user__detail--info--block">
+                <div class="user__detail--info--icon">🏠</div>
+                <div
+                  class="user__detail--info--content"
+                >{{ user.address.street }}, {{ user.address.city }}</div>
+              </div>
+              <div class="user__detail--info--block">
+                <div class="user__detail--info--icon">🌐</div>
+                <div class="user__detail--info--content">{{ user.website }}</div>
+              </div>
+            </div>
           </div>
-        </div>
+        </Modal>
       </div>
     </div>
   </div>
@@ -32,6 +61,7 @@
 <script setup>
 import { computed, onMounted } from 'vue';
 import { useStore } from 'vuex';
+import Modal from '../components/Modal.vue'
 
 const store = useStore();
 const users = computed(() => store.getters.users);
@@ -103,6 +133,8 @@ const logout = () => {
         position: relative;
         &__info {
           position: absolute;
+          top: 0;
+          left: 0;
           width: 100%;
           height: 100%;
           display: flex;
@@ -145,6 +177,46 @@ const logout = () => {
           padding-bottom: calc(100% * 4 / 3);
           border-radius: 12px;
           background-size: cover;
+        }
+        &__detail {
+          height: 50%;
+          width: 70%;
+          max-width: 800px;
+          border-radius: 12px;
+          overflow: hidden;
+          display: flex;
+          background-color: white;
+          &--avatar {
+            width: 30%;
+            height: 100%;
+            border-radius: 12px;
+            object-fit: cover;
+          }
+          &--info {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            &--block {
+              width: 100%;
+              display: flex;
+              align-items: center;
+              margin: 6px 32px;
+            }
+            &--icon {
+              width: 30px;
+              height: 30px;
+              border-radius: 100%;
+              background-color: whitesmoke;
+              box-shadow: 0 0 5px gray;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+            }
+            &--content {
+              padding: 0 12px;
+            }
+          }
         }
       }
     }
