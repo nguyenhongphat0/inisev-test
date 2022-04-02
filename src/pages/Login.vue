@@ -34,7 +34,6 @@ const login = () => {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 1rem;
   &__title {
     text-transform: uppercase;
   }

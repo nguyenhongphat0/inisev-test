@@ -41,7 +41,7 @@ const store = createStore({
             if (username === 'admin' && password === '1234') {
                 commit('LOGIN_SUCESS')
                 localStorage.setItem('loginStatus', 1)
-                router.push('/')
+                router.push({ name: 'Home' })
             } else {
                 commit('LOGIN_FAIL', -1)
             }
@@ -49,12 +49,9 @@ const store = createStore({
         logout({ commit }) {
             commit('LOGOUT')
             localStorage.clear()
-            router.push('/login')
+            router.push({ name: 'Login' })
         },
         loadUsers({ commit, state }) {
-            if (state.loadingUsers) {
-                return
-            }
             commit('SAVE_USERS', null)
             getUsers().then(users => {
                 commit('SAVE_USERS', users)

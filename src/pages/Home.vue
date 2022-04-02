@@ -16,43 +16,46 @@
     <div class="content">
       <h1 class="title">Users</h1>
       <div class="grid">
-        <Modal v-for="user in users" class="user">
-          <template #trigger>
-            <div class="user__avatar" :style="{ 'background-image': `url(${user.image})` }"></div>
-            <div class="user__info">
-              <div class="user__info--email">✉️</div>
-              <h3 class="user__info--name">{{ user.name }}</h3>
-              <h4 class="user__info--address">{{ user.address.city }}</h4>
+        <div v-if="loading">Loading users...</div>
+        <template v-else>
+          <Modal v-for="user in users" class="user">
+            <template #trigger>
+              <div class="user__avatar" :style="{ 'background-image': `url(${user.image})` }"></div>
+              <div class="user__info">
+                <div class="user__info--email">✉️</div>
+                <h3 class="user__info--name">{{ user.name }}</h3>
+                <h4 class="user__info--address">{{ user.address.city }}</h4>
+              </div>
+            </template>
+            <div class="user__detail">
+              <img class="user__detail--avatar" :src="user.image" :alt="user.name" />
+              <div class="user__detail--info">
+                <div class="user__detail--info--block">
+                  <div class="user__detail--info--icon">👤</div>
+                  <div class="user__detail--info--content">{{ user.name }}</div>
+                </div>
+                <div class="user__detail--info--block">
+                  <div class="user__detail--info--icon">✉️</div>
+                  <div class="user__detail--info--content">{{ user.email }}</div>
+                </div>
+                <div class="user__detail--info--block">
+                  <div class="user__detail--info--icon">📞</div>
+                  <div class="user__detail--info--content">{{ user.phone }}</div>
+                </div>
+                <div class="user__detail--info--block">
+                  <div class="user__detail--info--icon">🏠</div>
+                  <div
+                    class="user__detail--info--content"
+                  >{{ user.address.street }}, {{ user.address.city }}</div>
+                </div>
+                <div class="user__detail--info--block">
+                  <div class="user__detail--info--icon">🌐</div>
+                  <div class="user__detail--info--content">{{ user.website }}</div>
+                </div>
+              </div>
             </div>
-          </template>
-          <div class="user__detail">
-            <img class="user__detail--avatar" :src="user.image" :alt="user.name" />
-            <div class="user__detail--info">
-              <div class="user__detail--info--block">
-                <div class="user__detail--info--icon">👤</div>
-                <div class="user__detail--info--content">{{ user.name }}</div>
-              </div>
-              <div class="user__detail--info--block">
-                <div class="user__detail--info--icon">✉️</div>
-                <div class="user__detail--info--content">{{ user.email }}</div>
-              </div>
-              <div class="user__detail--info--block">
-                <div class="user__detail--info--icon">📞</div>
-                <div class="user__detail--info--content">{{ user.phone }}</div>
-              </div>
-              <div class="user__detail--info--block">
-                <div class="user__detail--info--icon">🏠</div>
-                <div
-                  class="user__detail--info--content"
-                >{{ user.address.street }}, {{ user.address.city }}</div>
-              </div>
-              <div class="user__detail--info--block">
-                <div class="user__detail--info--icon">🌐</div>
-                <div class="user__detail--info--content">{{ user.website }}</div>
-              </div>
-            </div>
-          </div>
-        </Modal>
+          </Modal>
+        </template>
       </div>
     </div>
   </div>
@@ -64,6 +67,7 @@ import { useStore } from 'vuex';
 import Modal from '../components/Modal.vue'
 
 const store = useStore();
+const loading = computed(() => store.getters.loadingUsers);
 const users = computed(() => store.getters.users);
 onMounted(() => {
   store.dispatch('loadUsers');
